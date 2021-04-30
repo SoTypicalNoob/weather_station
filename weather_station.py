@@ -113,11 +113,89 @@ def create_graph(filename):
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
     ax.tick_params(axis='y', labelsize=10)
     ax2.tick_params(axis='y', labelsize=10)
-    plt.savefig("/home/n00b/weather_logger/static/weather_fig.png", dpi=150, bbox_inches='tight', transparent=True)
+    plt.savefig("/home/n00b/weather_station/static/weather_fig.png", dpi=150, bbox_inches='tight', transparent=True)
+
+
+def create_graph_24h(filename):
+    conn = sqlite3.connect(filename)
+    cur = conn.cursor()
+    cur.execute("SELECT date, temperature, humidity, pressure FROM Weather WHERE date > date('now', '-1 day')")
+    data = cur.fetchall()
+
+    dates = []
+    temps = []
+    hums = []
+    pressures = []
+    prev_hum = 0
+    line_width = 2
+
+    for row in data:
+        dates.append(parser.parse(row[0]))
+        temps.append(row[1])
+        if int(row[2]) == 0:
+            hums.append(pre_hum)
+        else:
+            hums.append(row[2])
+            pre_hum = row[2]
+        pressures.append(row[3])
+
+    fig = plt.figure(figsize=(16,10))
+    ax = fig.add_subplot(1,1,1)
+    ax.plot_date(dates, temps, '-', label='Temperature (°C)', linewidth=line_width)
+    ax.plot_date(dates, hums, '-', label='Humidity (%rH)', linewidth=line_width)
+    ax2 = ax.twinx()
+    ax2.plot_date(dates,pressures, '-', label='Atmospheric Pressure (hPa)', color='yellow', linewidth=line_width)
+    ax.legend(loc='upper left')
+    ax2.legend(loc='upper right')
+    ax2.set_ylim(990, 1010)
+    ax.set_ylim(20,60)
+    ax.tick_params(axis='x', labelrotation=45, labelsize=8)
+    ax.tick_params(axis='y', labelsize=10)
+    ax2.tick_params(axis='y', labelsize=10)
+    plt.savefig("/home/n00b/weather_station/static/weather_fig_24h.png", dpi=150, bbox_inches='tight', transparent=True)
+
+
+def create_graph_7d(filename):
+    conn = sqlite3.connect(filename)
+    cur = conn.cursor()
+    cur.execute("SELECT date, temperature, humidity, pressure FROM Weather WHERE date > date('now', '-7 day')")
+    data = cur.fetchall()
+
+    dates = []
+    temps = []
+    hums = []
+    pressures = []
+    prev_hum = 0
+    line_width = 2
+
+    for row in data:
+        dates.append(parser.parse(row[0]))
+        temps.append(row[1])
+        if int(row[2]) == 0:
+            hums.append(pre_hum)
+        else:
+            hums.append(row[2])
+            pre_hum = row[2]
+        pressures.append(row[3])
+
+    fig = plt.figure(figsize=(16,10))
+    ax = fig.add_subplot(1,1,1)
+    ax.plot_date(dates, temps, '-', label='Temperature (°C)', linewidth=line_width)
+    ax.plot_date(dates, hums, '-', label='Humidity (%rH)', linewidth=line_width)
+    ax2 = ax.twinx()
+    ax2.plot_date(dates,pressures, '-', label='Atmospheric Pressure (hPa)', color='yellow', linewidth=line_width)
+    ax.legend(loc='upper left')
+    ax2.legend(loc='upper right')
+    ax2.set_ylim(990, 1010)
+    ax.set_ylim(20,60)
+    ax.tick_params(axis='x', labelrotation=45, labelsize=8)
+    ax.tick_params(axis='y', labelsize=10)
+    ax2.tick_params(axis='y', labelsize=10)
+    plt.savefig("/home/n00b/weather_station/static/weather_fig_7d.png", dpi=150, bbox_inches='tight', transparent=True)
 
 
 def main():
-    filename = "/home/n00b/weather_logger/weather_station.sqlite3"
+    filename = "/home/n00b/weather_station/weather_station.sqlite3"
     now = datetime.datetime.now()
     temp = round(read_temp(), 1)
     time.sleep(3)
@@ -125,6 +203,8 @@ def main():
     pressure = round(read_pressure(), 1)
     write_database(filename, now.strftime('%Y-%m-%d %H:%M:%S'), temp, hum, pressure)
     create_graph(filename)
+    create_graph_24h(filename)
+    create_graph_7d(filename)
 
 
 if __name__ == "__main__":

@@ -5,6 +5,11 @@
   </head>
   <body>
     <h1>Dashboard</h1>
-      <img src="{{ url_for('static', filename='weather_fig.png')}}" width="1200">
+    <h2>Last day and today:</h2>
+    <img src="{{ url_for('static', filename='weather_fig_24h.png')}}" width="1200">
+    <h2>Last 7 days</h2>
+    <img src="{{ url_for('static', filename='weather_fig_7d.png')}}" width="1200">
+    <h2>All available data</h2>
+    <img src="{{ url_for('static', filename='weather_fig.png')}}" width="1200">
     </body>
   </html>
