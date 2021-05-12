@@ -6,6 +6,7 @@ import os
 import sqlite3
 import datetime
 import time
+import math
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from dateutil import parser
@@ -137,6 +138,24 @@ def create_graph(filename):
             pre_hum = row[2]
         pressures.append(row[3])
 
+    max_t = max(temps)
+    min_t = min(temps)
+    max_h = max(hums)
+    min_h = min(hums)
+    max_p = math.ceil(max(pressures))
+    min_p = math.floor(min(pressures))
+    if max_t > max_h:
+        maxy = math.ceil(max_t)
+        pass
+    else:
+        maxy = math.ceil(max_h)
+        pass
+    if min_t < min_h:
+        miny = math.floor(min_t)
+        pass
+    else:
+        miny = math.floor(min_h)
+
     fig = plt.figure(figsize=(16,10))
     ax = fig.add_subplot(1,1,1)
     ax.plot_date(dates, temps, '-', label='Temperature (°C)', linewidth=line_width)
@@ -145,8 +164,8 @@ def create_graph(filename):
     ax2.plot_date(dates,pressures, '-', label='Atmospheric Pressure (hPa)', color='yellow', linewidth=line_width)
     ax.legend(loc='upper left')
     ax2.legend(loc='upper right')
-    ax2.set_ylim(990, 1010)
-    ax.set_ylim(20,60)
+    ax.set_ylim(miny, maxy)
+    ax2.set_ylim(min_p, max_p)
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
     ax.tick_params(axis='y', labelsize=10)
     ax2.tick_params(axis='y', labelsize=10)
@@ -176,6 +195,24 @@ def create_graph_24h(filename):
             pre_hum = row[2]
         pressures.append(row[3])
 
+    max_t = max(temps)
+    min_t = min(temps)
+    max_h = max(hums)
+    min_h = min(hums)
+    max_p = math.ceil(max(pressures))
+    min_p = math.floor(min(pressures))
+    if max_t > max_h:
+        maxy = math.ceil(max_t)
+        pass
+    else:
+        maxy = math.ceil(max_h)
+        pass
+    if min_t < min_h:
+        miny = math.floor(min_t)
+        pass
+    else:
+        miny = math.floor(min_h)
+
     fig = plt.figure(figsize=(16,10))
     ax = fig.add_subplot(1,1,1)
     ax.plot_date(dates, temps, '-', label='Temperature (°C)', linewidth=line_width)
@@ -184,8 +221,8 @@ def create_graph_24h(filename):
     ax2.plot_date(dates,pressures, '-', label='Atmospheric Pressure (hPa)', color='yellow', linewidth=line_width)
     ax.legend(loc='upper left')
     ax2.legend(loc='upper right')
-    ax2.set_ylim(990, 1010)
-    ax.set_ylim(20,60)
+    ax.set_ylim(miny,maxy)
+    ax2.set_ylim(min_p, max_p)
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
     ax.tick_params(axis='y', labelsize=10)
     ax2.tick_params(axis='y', labelsize=10)
@@ -215,6 +252,24 @@ def create_graph_7d(filename):
             pre_hum = row[2]
         pressures.append(row[3])
 
+    max_t = max(temps)
+    min_t = min(temps)
+    max_h = max(hums)
+    min_h = min(hums)
+    max_p = math.ceil(max(pressures))
+    min_p = math.floor(min(pressures))
+    if max_t > max_h:
+        maxy = math.ceil(max_t)
+        pass
+    else:
+        maxy = math.ceil(max_h)
+        pass
+    if min_t < min_h:
+        miny = math.floor(min_t)
+        pass
+    else:
+        miny = math.floor(min_h)
+
     fig = plt.figure(figsize=(16,10))
     ax = fig.add_subplot(1,1,1)
     ax.plot_date(dates, temps, '-', label='Temperature (°C)', linewidth=line_width)
@@ -223,8 +278,8 @@ def create_graph_7d(filename):
     ax2.plot_date(dates,pressures, '-', label='Atmospheric Pressure (hPa)', color='yellow', linewidth=line_width)
     ax.legend(loc='upper left')
     ax2.legend(loc='upper right')
-    ax2.set_ylim(990, 1010)
-    ax.set_ylim(20,60)
+    ax.set_ylim(miny, maxy)
+    ax2.set_ylim(min_p, max_p)
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
     ax.tick_params(axis='y', labelsize=10)
     ax2.tick_params(axis='y', labelsize=10)
